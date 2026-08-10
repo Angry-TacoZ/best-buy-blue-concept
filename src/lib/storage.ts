@@ -1,17 +1,18 @@
 import { defaultMemory } from '../data/memory'
 import type { ShoppingMemory } from '../types'
 
-export const MEMORY_KEY = 'blue-shopping-memory-v1'
+export const MEMORY_KEY = 'blue-shopping-memory-v2'
 
 const isMemory = (value: unknown): value is ShoppingMemory => {
   if (!value || typeof value !== 'object') return false
   const memory = value as Partial<ShoppingMemory>
   return (
-    memory.version === 1 &&
+    memory.version === 2 &&
     typeof memory.enabled === 'boolean' &&
     typeof memory.acknowledged === 'boolean' &&
     typeof memory.shopper === 'string' &&
     typeof memory.goal === 'string' &&
+    typeof memory.additionalNeeds === 'string' &&
     typeof memory.budget === 'number' &&
     Number.isFinite(memory.budget) &&
     typeof memory.openBox === 'boolean' &&

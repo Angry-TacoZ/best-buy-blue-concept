@@ -74,6 +74,16 @@ export function MemoryPanel({ open, memory, onClose, onChange, onClear, onRestor
               />
             </label>
             <label>
+              Additional needs or coursework
+              <textarea
+                rows={3}
+                value={memory.additionalNeeds}
+                placeholder="Example: The student will be enrolled in a CAD class."
+                onChange={(event) => onChange({ ...memory, additionalNeeds: event.target.value })}
+              />
+              <small className="field-hint">This demo recognizes CAD, AutoCAD, Solidworks, Revit, 3D modeling, and engineering design.</small>
+            </label>
+            <label>
               Maximum budget
               <span className="budget-input">
                 <span>$</span>
@@ -97,8 +107,8 @@ export function MemoryPanel({ open, memory, onClose, onChange, onClear, onRestor
             </label>
 
             <div className="priority-readout">
-              <span>Highest priorities</span>
-              <strong>Durability · Portability · Battery</strong>
+              <span>Blue is connecting</span>
+              <strong>{!memory.enabled ? 'Nothing · Saved context is not in use' : /\b(cad|autocad|solidworks|revit|3d model|engineering design)\b/i.test(memory.additionalNeeds) ? 'CAD · Dedicated GPU · 16–32 GB memory' : 'Durability · Portability · Battery'}</strong>
             </div>
 
             <div className="panel-actions">

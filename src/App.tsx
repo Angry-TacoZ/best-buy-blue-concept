@@ -6,7 +6,7 @@ import { MemoryDisclosure } from './components/MemoryDisclosure'
 import { MemoryPanel } from './components/MemoryPanel'
 import { ProductVisual } from './components/ProductVisual'
 import { products } from './data/products'
-import { getShortlist } from './lib/recommendations'
+import { getProductGuidance, getShortlist, hasCadNeed } from './lib/recommendations'
 import { clearMemory, loadMemory, restoreMemory, saveMemory } from './lib/storage'
 import type { AgentCue, DemoState, Product, ShoppingMemory } from './types'
 
@@ -25,6 +25,7 @@ function App() {
   const productSection = useRef<HTMLElement>(null)
   const shortlistSection = useRef<HTMLElement>(null)
   const shortlist = useMemo(() => getShortlist(products, memory), [memory])
+  const cadAware = memory.enabled && hasCadNeed(memory)
 
   useEffect(() => saveMemory(memory), [memory])
   useEffect(() => () => window.clearTimeout(cueTimer.current), [])
@@ -52,15 +53,7 @@ function App() {
         : [...current.selectedProductIds, product.id],
     }))
 
-    const personalized = memory.enabled
-      ? product.archetype === 'ultralight'
-        ? `${product.weight} pounds matters when it crosses campus every day. I’m weighing that against long-term durability.`
-        : product.archetype === 'durable'
-          ? `This is the sturdier four-year bet. The honest cost is ${product.weight} pounds in the backpack.`
-          : `${currency.format((product.originalPrice ?? product.price) - product.price)} saved is useful—but only if the condition and warranty check out.`
-      : `Without memory, I can explain the specifications, but I can’t tell which tradeoff fits this shopper.`
-
-    showCue(personalized, event.currentTarget, event.detail === 0)
+    showCue(getProductGuidance(product, memory), event.currentTarget, event.detail === 0)
   }
 
   const revealShortlist = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -77,7 +70,23 @@ function App() {
 
   const updateMemory = (next: ShoppingMemory) => {
     setMemory(next)
-    showCue(next.enabled ? 'I’ll use only the preferences you can see here.' : 'Memory is off. I’ll stop using the college-shopping context.')
+    showCue(
+      next.enabled && hasCadNeed(next)
+        ? 'CAD is now part of the decision. I’ll weigh graphics capability, memory, and performance alongside campus needs.'
+        : next.enabled
+          ? 'I’ll use only the preferences you can see here.'
+          : 'Memory is off. I can still list specifications, but I will not connect them to the student’s CAD class.',
+    )
+  }
+
+  const toggleMemoryComparison = () => {
+    const enabled = !memory.enabled
+    setMemory((current) => ({ ...current, enabled }))
+    showCue(
+      enabled
+        ? 'Memory restored: CAD now changes the shortlist and the advice attached to each laptop.'
+        : 'Memory off: the CAD need is still saved locally, but I am intentionally not using it.',
+    )
   }
 
   const handleClear = () => {
@@ -188,6 +197,8 @@ function App() {
                     <div className="quick-specs">
                       <span>{product.weight} lb</span>
                       <span>{product.batteryHours} hr battery</span>
+                      <span>{product.specs.memoryGb} GB memory</span>
+                      <span className={product.specs.gpuClass === 'integrated' ? '' : 'spec-emphasis'}>{product.specs.gpuLabel}</span>
                     </div>
                   </div>
                 </motion.button>
@@ -217,8 +228,22 @@ function App() {
           >
             <div className="shortlist-heading">
               <span className="eyebrow">Blue’s three finalists</span>
-              <h2 id="shortlist-title">Different benefits. The decision stays yours.</h2>
-              <p>{memory.enabled ? `Based on: ${memory.goal.toLowerCase()}.` : 'Shopping memory is off, so these explanations use generic priorities.'}</p>
+              <h2 id="shortlist-title">{cadAware ? 'CAD changes the finalists.' : memory.enabled ? 'Different benefits. The decision stays yours.' : 'Generic advice loses the coursework context.'}</h2>
+              <p>{cadAware ? `Using the remembered need: ${memory.additionalNeeds}` : memory.enabled ? `Based on: ${memory.goal.toLowerCase()}.` : 'Shopping memory is off, so these explanations use general laptop priorities—even though the CAD need remains saved locally.'}</p>
+            </div>
+            <div className={`memory-impact ${memory.enabled ? 'memory-impact--on' : 'memory-impact--off'}`} aria-live="polite">
+              <div className="memory-impact-state">
+                <span>{memory.enabled ? 'Memory on' : 'Memory off'}</span>
+                <strong>{memory.enabled ? 'CAD informs the decision' : 'CAD context is ignored'}</strong>
+              </div>
+              <p>
+                {memory.enabled
+                  ? 'Blue checks GPU class, installed memory, and performance before balancing portability, durability, battery, and price.'
+                  : 'Blue can repeat GPU and memory specifications, but it no longer knows why they matter. The lighter integrated-graphics option returns.'}
+              </p>
+              <button className={memory.enabled ? 'secondary-button' : 'primary-button'} onClick={toggleMemoryComparison}>
+                {memory.enabled ? 'Turn memory off to compare' : 'Turn memory on'}
+              </button>
             </div>
             <div className="finalist-grid">
               {shortlist.map((result, index) => (
@@ -240,7 +265,7 @@ function App() {
             </div>
             <div className="assumption-note">
               <Info size={18} />
-              <p><strong>What Blue does not know:</strong> the student’s major, required software, accessibility needs, or hands-on preference. Those answers should change the decision before checkout.</p>
+              <p><strong>What Blue still does not know:</strong> the exact CAD application, the course’s minimum GPU requirements, accessibility needs, or whether campus lab machines handle rendering. Those answers should change the decision before checkout.</p>
             </div>
           </motion.section>
         )}

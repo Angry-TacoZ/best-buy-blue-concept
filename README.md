@@ -18,6 +18,8 @@ Retail assistants often require the shopper to stop browsing, open a panel, and 
 
 The demonstration follows a parent looking for a portable, durable college laptop. The final shortlist preserves three useful tradeoffs: carry less, protect the investment, or preserve more of the budget.
 
+The seeded memory now includes an upcoming CAD class. Blue treats that remembered fact as a decision-changing requirement: dedicated graphics, installed memory, and performance gain weight, product tips explain CAD relevance, and the shortlist changes. A single comparison control turns memory off while preserving the same saved scenario, demonstrating how generic guidance can return an integrated-graphics laptop without understanding why that tradeoff is risky.
+
 ![Blue concept hero](docs/assets/blue-hero.png)
 
 ![Blue three-finalist decision view](docs/assets/blue-finalists.png)
@@ -27,6 +29,7 @@ The demonstration follows a parent looking for a portable, durable college lapto
 - Shopping memory is a fictional seeded profile stored only in `localStorage`.
 - Nothing is transmitted to Best Buy, an analytics provider, or a model API.
 - Recommendations are produced by deterministic local scoring.
+- Supported CAD-related language is interpreted locally through an explicit allowlist; this is simulated behavior, not a general-purpose language model.
 - There is no authentication, live catalogue, inventory, checkout, tracking, or purchasing behavior.
 - Clearing memory removes the browser entry and disables personalization.
 
@@ -57,6 +60,7 @@ The workspace-level verification contract is stored in `.codex/verify.json`. CI 
 - Framer Motion for restrained presence and reveal motion
 - Versioned browser-local memory adapter with malformed-state recovery
 - Deterministic scoring across portability, durability, battery, performance, value, price, and open-box preference
+- A bounded CAD requirement interpreter that adds GPU and installed-memory capability to the scoring model
 - One finalist per decision archetype to prevent three nearly identical recommendations
 - Original SVG laptop illustrations with no third-party product logos
 

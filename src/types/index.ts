@@ -10,6 +10,11 @@ export interface Product {
   condition: 'New' | 'Open-box excellent'
   weight: number
   batteryHours: number
+  specs: {
+    memoryGb: number
+    gpuClass: 'integrated' | 'entry-dedicated' | 'dedicated'
+    gpuLabel: string
+  }
   attributes: {
     portability: number
     durability: number
@@ -24,11 +29,12 @@ export interface Product {
 }
 
 export interface ShoppingMemory {
-  version: 1
+  version: 2
   enabled: boolean
   acknowledged: boolean
   shopper: string
   goal: string
+  additionalNeeds: string
   budget: number
   openBox: boolean
   priorities: {
