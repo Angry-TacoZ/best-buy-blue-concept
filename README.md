@@ -2,6 +2,8 @@
 
 An independent, employer-facing product concept exploring what it would look like if a retail AI agent accompanied the decision instead of living in a corner chat panel.
 
+**[Open the live concept demo](https://angry-tacoz.github.io/best-buy-blue-concept/)**
+
 > This project is not affiliated with, endorsed by, or connected to Best Buy. BEST BUY is a trademark of its respective owner. Every product, price, review, condition, and recommendation in this demo is fictional or illustrative.
 
 ## Product thesis

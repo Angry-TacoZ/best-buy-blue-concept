@@ -4,7 +4,7 @@ Create and publish an independent Best Buy concept demo showing a quiet, cursor-
 
 # Current status
 
-The full visual and functional draft is running locally at `http://127.0.0.1:4173/` on branch `codex/ambient-blue-demo`. Local verification is complete; GitHub publication and Pages deployment are next.
+The verified concept is published at `https://angry-tacoz.github.io/best-buy-blue-concept/`. PR #1 was merged to `main`; the local checkout matches `origin/main`. The local development server remains available at `http://127.0.0.1:4173/` for this session.
 
 # Decisions
 
@@ -30,13 +30,15 @@ The full visual and functional draft is running locally at `http://127.0.0.1:417
 - Local HTTP returned 200 and browser interaction checks showed no console errors.
 - Canonical verifier returned `PASS` for declared scope `public-low-risk`.
 - Predeployment secret/API exposure scan passed.
-- Live deployment and smoke testing remain pending.
+- GitHub Verify and Pages workflows passed on the merged source state.
+- The deployed application returned the expected title, catalogue, product imagery, memory disclosure, and shortlist controls at the public URL.
+- Public browser checks at 1440×900 and 1024×768 found no page-origin console errors or horizontal overflow.
 
 # Next task
 
-Create the public GitHub repository, push the verified branch, open the draft PR, complete CI, merge, deploy Pages, and smoke-test the live URL.
+Optional employer feedback and iteration. A real retailer integration remains intentionally out of scope.
 
 # Risks or blockers
 
-- GitHub Pages repository and permissions are not configured yet.
-- Production readiness remains conditional until CI and the live smoke test pass.
+- No release blocker remains for the declared public, low-risk static-demo scope.
+- Products, pricing, reviews, availability, saved memory, and recommendations are illustrative—not live retail data.
