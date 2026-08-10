@@ -4,7 +4,7 @@ Create and publish an independent Best Buy concept demo showing a quiet, cursor-
 
 # Current status
 
-The verified baseline is published at `https://angry-tacoz.github.io/best-buy-blue-concept/`. A CAD-aware memory comparison is implemented locally and awaiting its focused PR, CI, merge, and Pages deployment. The local development server remains available at `http://127.0.0.1:4173/` for this session.
+The CAD-aware memory comparison is merged and published at `https://angry-tacoz.github.io/best-buy-blue-concept/`. PR #2 passed CI and was squash-merged to `main`. The local development server remains available at `http://127.0.0.1:4173/` for this session.
 
 # Decisions
 
@@ -36,10 +36,12 @@ The verified baseline is published at `https://angry-tacoz.github.io/best-buy-bl
 - GitHub Verify and Pages workflows passed on the merged source state.
 - The deployed application returned the expected title, catalogue, product imagery, memory disclosure, and shortlist controls at the public URL.
 - Public browser checks at 1440×900 and 1024×768 found no page-origin console errors or horizontal overflow.
+- PR #2 and both post-merge GitHub workflows passed on merge commit `c8c1c2478d7a66dc3293ac50a0ff20ada7bd059b`.
+- Live smoke testing confirmed memory-on finalists `HALO 14 / FORGE 14 / ATLAS 14`, memory-off finalists `AER 13 / FORGE 14 / ATLAS 14`, no horizontal overflow, and no page-origin console warnings or errors.
 
 # Next task
 
-Open a focused PR for the CAD-memory comparison, complete CI, merge, deploy Pages, and smoke-test the updated public URL.
+Optional employer feedback and iteration. A real retailer integration remains intentionally out of scope.
 
 # Risks or blockers
 
