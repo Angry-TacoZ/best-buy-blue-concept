@@ -1,11 +1,12 @@
 import type { ShoppingMemory } from '../types'
 
 export const defaultMemory: ShoppingMemory = {
-  version: 1,
+  version: 2,
   enabled: true,
   acknowledged: false,
   shopper: 'Parent shopping for a first-year college student',
   goal: 'A portable, durable laptop for daily trips across campus',
+  additionalNeeds: 'The student will be enrolled in a CAD class.',
   budget: 1200,
   openBox: true,
   priorities: {

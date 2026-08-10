@@ -14,9 +14,9 @@ export function MemoryDisclosure({ memory, onAcknowledge, onInspect }: MemoryDis
     <section className="memory-disclosure" aria-labelledby="memory-disclosure-title">
       <div className="disclosure-icon"><ShieldCheck size={22} /></div>
       <div>
-        <span className="eyebrow">Memory is on for this demonstration</span>
-        <h2 id="memory-disclosure-title">Blue remembers the reason for this trip.</h2>
-        <p>{memory.goal}. Budget: ${memory.budget.toLocaleString()}. Open-box deals are welcome.</p>
+        <span className="eyebrow">Memory is {memory.enabled ? 'on' : 'off'} for this demonstration</span>
+        <h2 id="memory-disclosure-title">{memory.enabled ? 'Blue remembers the reason for this trip.' : 'Blue will not use the saved shopping context.'}</h2>
+        <p>{memory.goal}. <strong>{memory.enabled ? 'Added need' : 'Saved but ignored'}: {memory.additionalNeeds}</strong> Budget: ${memory.budget.toLocaleString()}. Open-box deals are welcome.</p>
       </div>
       <div className="disclosure-actions">
         <button className="secondary-button" onClick={onInspect}><Eye size={16} /> Inspect memory</button>

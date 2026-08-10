@@ -13,13 +13,24 @@ test('completes the personalized college-laptop decision flow', async ({ page })
   await page.getByRole('button', { name: /Continue shopping/i }).click()
 
   await page.getByRole('button', { name: /AER 13 illustrative/i }).click()
-  await expect(page.locator('.blue-comment')).toContainText('2.2 pounds matters')
+  await expect(page.locator('.blue-comment')).toContainText('CAD changes this choice')
 
   await page.getByRole('button', { name: /Show three finalists/i }).click()
   await expect(page.locator('.finalist')).toHaveCount(3)
-  await expect(page.locator('.finalist').nth(0)).toContainText('AER 13')
+  await expect(page.locator('.finalist').nth(0)).toContainText('HALO 14')
   await expect(page.locator('.finalist').nth(1)).toContainText('FORGE 14')
   await expect(page.locator('.finalist').nth(2)).toContainText('ATLAS 14')
+})
+
+test('same CAD scenario becomes generic and selects integrated graphics with memory off', async ({ page }) => {
+  await page.getByRole('button', { name: /Show three finalists/i }).click()
+  await expect(page.locator('.finalist').nth(0)).toContainText('HALO 14')
+  await expect(page.locator('.memory-impact')).toContainText('CAD informs the decision')
+
+  await page.getByRole('button', { name: /Turn memory off to compare/i }).click()
+  await expect(page.getByRole('heading', { name: /Generic advice loses the coursework context/i })).toBeVisible()
+  await expect(page.locator('.finalist').nth(0)).toContainText('AER 13')
+  await expect(page.locator('.memory-impact')).toContainText('CAD context is ignored')
 })
 
 test('memory can be inspected, disabled, and restored', async ({ page }) => {
@@ -31,6 +42,21 @@ test('memory can be inspected, disabled, and restored', async ({ page }) => {
 
   await page.getByRole('button', { name: /Restore demo/i }).click()
   await expect(memorySwitch).toBeChecked()
+})
+
+test('editing coursework changes CAD capability guidance and the shortlist', async ({ page }) => {
+  await page.getByRole('button', { name: /Memory on/i }).click()
+  const needs = page.getByRole('textbox', { name: /Additional needs or coursework/i })
+  await needs.fill('Needs a quiet keyboard.')
+  await page.getByLabel('Close shopping memory').last().click()
+  await page.getByRole('button', { name: /Show three finalists/i }).click()
+  await expect(page.locator('.finalist').nth(0)).toContainText('AER 13')
+
+  await page.getByRole('button', { name: /Memory on/i }).click()
+  await needs.fill('The student will be enrolled in a Solidworks CAD class.')
+  await expect(page.getByText(/CAD · Dedicated GPU · 16–32 GB memory/i)).toBeVisible()
+  await page.getByLabel('Close shopping memory').last().click()
+  await expect(page.locator('.finalist').nth(0)).toContainText('HALO 14')
 })
 
 test('desktop layout avoids horizontal overflow', async ({ page }) => {
@@ -51,6 +77,6 @@ test('remains usable with reduced motion and contains no sound media', async ({ 
   await page.getByRole('button', { name: /Continue shopping/i }).click()
   await page.getByRole('button', { name: /AER 13 illustrative/i }).click()
 
-  await expect(page.locator('.blue-comment')).toContainText('2.2 pounds matters')
+  await expect(page.locator('.blue-comment')).toContainText('CAD changes this choice')
   await expect(page.locator('audio, video')).toHaveCount(0)
 })
