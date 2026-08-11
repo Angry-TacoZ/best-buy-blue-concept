@@ -1,4 +1,4 @@
-# Blue — Ambient Shopping Agent Concept
+# Blue: Ambient Shopping Agent Concept
 
 An independent, employer-facing product concept exploring what it would look like if a retail AI agent accompanied the decision instead of living in a corner chat panel.
 
@@ -8,17 +8,17 @@ An independent, employer-facing product concept exploring what it would look lik
 
 ## Product thesis
 
-Retail assistants often require the shopper to stop browsing, open a panel, and translate their goal into a chat prompt. Blue demonstrates a quieter alternative:
+Retail assistants often require the shopper to stop browsing, open a panel, and translate their goal into a chat prompt. Blue takes a quieter approach:
 
 - it comments only after deliberate product interactions;
 - it connects one relevant fact to visible shopper priorities;
 - it uses no sound or interruption queue;
 - it keeps memory inspectable, editable, reversible, and browser-local;
-- it presents three different decision directions rather than claiming one universal winner.
+- it offers three decision directions instead of claiming one universal winner.
 
-The demonstration follows a parent looking for a portable, durable college laptop. The final shortlist preserves three useful tradeoffs: carry less, protect the investment, or preserve more of the budget.
+The demonstration follows a parent looking for a portable, durable college laptop. The final shortlist makes the tradeoffs clear: carry less, protect the investment, or preserve more of the budget.
 
-The seeded memory now includes an upcoming CAD class. Blue treats that remembered fact as a decision-changing requirement: dedicated graphics, installed memory, and performance gain weight, product tips explain CAD relevance, and the shortlist changes. A single comparison control turns memory off while preserving the same saved scenario, demonstrating how generic guidance can return an integrated-graphics laptop without understanding why that tradeoff is risky.
+The seeded memory includes an upcoming CAD class. That changes the scoring: dedicated graphics, installed memory, and performance carry more weight; product tips explain the CAD connection; and the shortlist changes. A single comparison control turns memory off while keeping the saved scenario, showing how generic guidance can recommend integrated graphics without accounting for that requirement.
 
 ![Blue concept hero](docs/assets/blue-hero.png)
 
