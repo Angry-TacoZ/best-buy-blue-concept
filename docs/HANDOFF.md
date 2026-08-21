@@ -4,7 +4,7 @@ Create and publish an independent Best Buy concept demo showing a quiet, cursor-
 
 # Current status
 
-The published baseline remains at `https://angry-tacoz.github.io/best-buy-blue-concept/`. A protected extension of the existing experience is implemented locally on `codex/curated-checkout-slice`: memory-snapshot curation now carries one laptop from the landing page through an illustrative checkout and completion state. The existing landing, catalogue, shortlist, memory comparison, and Blue behavior remain intact.
+The memory-curated vertical slice is merged and published at `https://angry-tacoz.github.io/best-buy-blue-concept/`. PR #4 passed CI and was squash-merged to `main` as `2a2771d7ad122a9f23d5a7c1dc29e68c1b93f8d3`. Memory-snapshot curation now carries one laptop from the landing page through an illustrative checkout and completion state. The existing landing, catalogue, shortlist, memory comparison, and Blue behavior remain intact.
 
 # Decisions
 
@@ -44,10 +44,12 @@ The published baseline remains at `https://angry-tacoz.github.io/best-buy-blue-c
 - Public browser checks at 1440×900 and 1024×768 found no page-origin console errors or horizontal overflow.
 - PR #2 and both post-merge GitHub workflows passed on merge commit `c8c1c2478d7a66dc3293ac50a0ff20ada7bd059b`.
 - Live smoke testing confirmed memory-on finalists `HALO 14 / FORGE 14 / ATLAS 14`, memory-off finalists `AER 13 / FORGE 14 / ATLAS 14`, no horizontal overflow, and no page-origin console warnings or errors.
+- PR #4, post-merge Verify, and GitHub Pages deployment passed for merge commit `2a2771d7ad122a9f23d5a7c1dc29e68c1b93f8d3`.
+- Public smoke testing confirmed three CAD-aware curated products, HALO 14 checkout continuity, the no-purchase completion state, zero checkout overflow, and no page-origin warnings or errors.
 
 # Next task
 
-Move the verified extension through its focused PR and public Pages deployment, then smoke-test the released journey.
+Optional employer feedback and iteration. Real transactional integration remains intentionally out of scope.
 
 # Risks or blockers
 
