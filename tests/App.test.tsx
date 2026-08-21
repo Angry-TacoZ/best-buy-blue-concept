@@ -33,6 +33,14 @@ describe('Blue concept experience', () => {
     expect(screen.getAllByText('What you give up')).toHaveLength(3)
   })
 
+  it('reveals the same finalists from the header navigation', () => {
+    const { container } = render(<App />)
+    fireEvent.click(screen.getByRole('link', { name: 'Finalists' }))
+
+    expect(screen.getByRole('heading', { name: /CAD changes the finalists/i })).toBeInTheDocument()
+    expect(container.querySelectorAll('.finalist')).toHaveLength(3)
+  })
+
   it('allows memory to be disabled and explains the generic state', () => {
     render(<App />)
     fireEvent.click(screen.getByRole('button', { name: /Memory on/i }))

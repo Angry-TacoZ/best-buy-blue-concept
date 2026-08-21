@@ -31,6 +31,7 @@ function App() {
   const cueTimer = useRef<number | undefined>(undefined)
   const productSection = useRef<HTMLElement>(null)
   const shortlistSection = useRef<HTMLElement>(null)
+  const shortlistHeading = useRef<HTMLHeadingElement>(null)
   const shortlist = useMemo(() => getShortlist(products, memory), [memory])
   const cadAware = memory.enabled && hasCadNeed(memory)
 
@@ -63,16 +64,20 @@ function App() {
     showCue(getProductGuidance(product, memory), event.currentTarget, event.detail === 0)
   }
 
-  const revealShortlist = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const revealShortlist = (event: React.MouseEvent<HTMLElement>) => {
+    const keyboard = event.detail === 0
     setState((current) => ({ ...current, shortlistVisible: true }))
     showCue(
       memory.enabled
         ? 'I kept three different answers—not three versions of the same answer—so the decision stays human.'
         : 'This shortlist is generic because shopping memory is off. Turn it on to see the college context change the reasoning.',
       event.currentTarget,
-      event.detail === 0,
+      keyboard,
     )
-    window.setTimeout(() => shortlistSection.current?.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120)
+    window.setTimeout(() => {
+      shortlistSection.current?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      if (keyboard) shortlistHeading.current?.focus({ preventScroll: true })
+    }, 120)
   }
 
   const updateMemory = (next: ShoppingMemory) => {
@@ -185,7 +190,15 @@ function App() {
         </label>
         <nav aria-label="Concept navigation">
           <a href="#laptops">Laptops</a>
-          <a href="#finalists">Finalists</a>
+          <a
+            href="#finalists"
+            onClick={(event) => {
+              event.preventDefault()
+              revealShortlist(event)
+            }}
+          >
+            Finalists
+          </a>
           <button className={`memory-status ${memory.enabled ? 'memory-status--on' : ''}`} onClick={() => setState((current) => ({ ...current, memoryPanelOpen: true }))}>
             <MemoryStick size={16} /> Memory {memory.enabled ? 'on' : 'off'}
           </button>
@@ -305,7 +318,7 @@ function App() {
           >
             <div className="shortlist-heading">
               <span className="eyebrow">Blue’s three finalists</span>
-              <h2 id="shortlist-title">{cadAware ? 'CAD changes the finalists.' : memory.enabled ? 'Different benefits. The decision stays yours.' : 'Generic advice loses the coursework context.'}</h2>
+              <h2 id="shortlist-title" ref={shortlistHeading} tabIndex={-1}>{cadAware ? 'CAD changes the finalists.' : memory.enabled ? 'Different benefits. The decision stays yours.' : 'Generic advice loses the coursework context.'}</h2>
               <p>{cadAware ? `Using the remembered need: ${memory.additionalNeeds}` : memory.enabled ? `Based on: ${memory.goal.toLowerCase()}.` : 'Shopping memory is off, so these explanations use general laptop priorities—even though the CAD need remains saved locally.'}</p>
             </div>
             <div className={`memory-impact ${memory.enabled ? 'memory-impact--on' : 'memory-impact--off'}`} aria-live="polite">
