@@ -6,7 +6,7 @@ Create and publish an independent Best Buy concept demo showing a quiet, cursor-
 
 The memory-curated vertical slice is merged and published at `https://angry-tacoz.github.io/best-buy-blue-concept/`. PR #4 passed CI and was squash-merged to `main` as `2a2771d7ad122a9f23d5a7c1dc29e68c1b93f8d3`. Memory-snapshot curation now carries one laptop from the landing page through an illustrative checkout and completion state. The existing landing, catalogue, shortlist, memory comparison, and Blue behavior remain intact.
 
-The `codex/fix-finalists-navigation` branch fixes the header `Finalists` link so it reveals and scrolls to the same shortlist as the yellow `Show three finalists` button. A blocking external AI review finding about keyboard focus has been addressed: Enter-key activation now moves focus to the newly rendered shortlist heading while mouse/touch activation remains scroll-only. The published site does not include this fix until the branch is re-reviewed, merged, and deployed.
+PR #5 was externally reviewed, squash-merged, and published from merge commit `2dba0be269cea0958de20ad607e063c968f5def3`. The header `Finalists` link now reveals and scrolls to the same shortlist as the yellow `Show three finalists` button. Enter-key activation also moves focus to the newly rendered shortlist heading while mouse/touch activation remains scroll-only.
 
 # Decisions
 
@@ -53,13 +53,15 @@ The `codex/fix-finalists-navigation` branch fixes the header `Finalists` link so
 - The finalist-navigation fix passed the canonical verifier: ESLint, strict TypeScript, 20 unit/component tests, and production build.
 - The complete Playwright suite passed with 17 tests and one intentional compact-width skip; the header link revealed three finalists and scrolled the shortlist into view at 1440px, while header navigation remains intentionally hidden below 1100px.
 - The external review focus finding was reproduced with a failing real Enter-key Playwright test, then verified passing with focus on the shortlist heading. The complete verifier and Playwright suite passed again after the fix.
+- PR #5 post-merge Verify and GitHub Pages deployment passed at `2dba0be269cea0958de20ad607e063c968f5def3`. Live smoke testing confirmed HTTP 200, three finalists, the shortlist in view, and active focus on the shortlist heading after Enter.
 
 # Next task
 
-Re-review the finalist-navigation fix. After approval, merge and deploy through the existing GitHub Pages workflow. Real transactional integration remains intentionally out of scope.
+Optional employer feedback and iteration. Real transactional integration remains intentionally out of scope.
 
 # Risks or blockers
 
-- The external review finding is addressed, but re-review approval is still required before merge under the workspace review gate.
+- No release blocker remains for the declared public, low-risk static-demo scope.
+- The live site requests `/favicon.ico`, which currently returns 404; this does not affect the shopping interaction and remains out of scope.
 - Products, pricing, reviews, availability, saved memory, and recommendations are illustrative—not live retail data.
 - Checkout demonstrates continuity and human approval only; it must not be mistaken for transactional functionality.
