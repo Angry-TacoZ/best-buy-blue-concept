@@ -20,9 +20,28 @@ The demonstration follows a parent looking for a portable, durable college lapto
 
 The seeded memory includes an upcoming CAD class. That changes the scoring: dedicated graphics, installed memory, and performance carry more weight; product tips explain the CAD connection; and the shortlist changes. A single comparison control turns memory off while keeping the saved scenario, showing how generic guidance can recommend integrated graphics without accounting for that requirement.
 
+## Complete vertical slice
+
+The existing landing page remains the discovery experience. A separate **Build my curated laptop page** action now demonstrates the complete product loop:
+
+1. The shopper lands on the site and can inspect or edit Blue's browser-local memory.
+2. Clicking the curation button calls `createCuratedCollection(products, memory)` at that moment.
+3. `src/lib/curation.ts` clones the current `ShoppingMemory` into a `memorySnapshot`, derives the visible curation signals, and runs the existing deterministic shortlist rules against that snapshot.
+4. `CuratedLaptopsPage` renders three distinct decision directions and shows exactly which saved signals were applied.
+5. The shopper chooses one laptop and continues to `CheckoutPage`, where the product, memory rationale, pickup method, optional protection, and illustrative total remain visible.
+6. The final confirmation states that no purchase was made and shows the remembered need alongside the selected outcome.
+
+The snapshot is deliberate: changing memory later cannot silently rewrite an already-generated page. Selecting **Rebuild from current memory** creates a new collection from the latest visible preferences.
+
 ![Blue concept hero](docs/assets/blue-hero.png)
 
 ![Blue three-finalist decision view](docs/assets/blue-finalists.png)
+
+![Blue generated curated-laptops page](docs/assets/blue-curated.png)
+
+![Blue illustrative checkout](docs/assets/blue-checkout.png)
+
+![Blue no-purchase completion state](docs/assets/blue-complete.png)
 
 ## Privacy and simulation boundary
 
@@ -30,7 +49,7 @@ The seeded memory includes an upcoming CAD class. That changes the scoring: dedi
 - Nothing is transmitted to Best Buy, an analytics provider, or a model API.
 - Recommendations are produced by deterministic local scoring.
 - Supported CAD-related language is interpreted locally through an explicit allowlist; this is simulated behavior, not a general-purpose language model.
-- There is no authentication, live catalogue, inventory, checkout, tracking, or purchasing behavior.
+- There is no authentication, live catalogue, inventory, tracking, payment, reservation, or purchasing behavior. Checkout is a labeled local simulation and collects no personal or payment information.
 - Clearing memory removes the browser entry and disables personalization.
 
 ## Run locally
@@ -62,6 +81,8 @@ The workspace-level verification contract is stored in `.codex/verify.json`. CI 
 - Deterministic scoring across portability, durability, battery, performance, value, price, and open-box preference
 - A bounded CAD requirement interpreter that adds GPU and installed-memory capability to the scoring model
 - One finalist per decision archetype to prevent three nearly identical recommendations
+- A typed `CuratedCollection` containing the generation timestamp, immutable memory snapshot, applied signals, and resulting products
+- A four-state local journey (`home`, `curated`, `checkout`, `complete`) that carries one selected product through an illustrative human-approval step
 - Original SVG laptop illustrations with no third-party product logos
 
 ## What a real implementation would require

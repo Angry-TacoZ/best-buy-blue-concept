@@ -59,6 +59,36 @@ test('editing coursework changes CAD capability guidance and the shortlist', asy
   await expect(page.locator('.finalist').nth(0)).toContainText('HALO 14')
 })
 
+test('generates a curated memory snapshot and carries a choice through simulated checkout', async ({ page }) => {
+  await expect(page.getByRole('heading', { name: /A shopping agent that knows when to speak/i })).toBeVisible()
+  await page.getByRole('button', { name: /Build my curated laptop page/i }).click()
+
+  await expect(page.getByRole('heading', { name: /Your laptop page, shaped by what Blue remembers/i })).toBeVisible()
+  await expect(page.getByText('CAD coursework')).toBeVisible()
+  await expect(page.locator('.curated-product')).toHaveCount(3)
+  await expect(page.locator('.curated-product').nth(0)).toContainText('HALO 14')
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1)
+  let accessibility = await new AxeBuilder({ page }).analyze()
+  expect(accessibility.violations.filter(({ impact }) => impact === 'serious' || impact === 'critical')).toEqual([])
+
+  await page.getByRole('button', { name: /Choose this laptop/i }).first().click()
+  await expect(page.locator('.blue-comment')).toContainText(/HALO 14 is selected/i)
+  await page.getByRole('button', { name: /Continue to checkout/i }).click()
+
+  await expect(page.getByRole('heading', { name: /Review the decision before acting/i })).toBeVisible()
+  await expect(page.getByRole('heading', { name: /Order summary/i })).toBeVisible()
+  await expect(page.getByText(/No payment or personal information is collected/i)).toBeVisible()
+  expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(1)
+  accessibility = await new AxeBuilder({ page }).analyze()
+  expect(accessibility.violations.filter(({ impact }) => impact === 'serious' || impact === 'critical')).toEqual([])
+  await page.getByRole('checkbox', { name: /Two-year accidental-damage plan/i }).check()
+  await expect(page.locator('.order-summary')).toContainText('$129.99')
+
+  await page.getByRole('button', { name: /Complete demo checkout/i }).click()
+  await expect(page.getByRole('heading', { name: /Nothing was purchased/i })).toBeVisible()
+  await expect(page.getByText(/HALO 14 · Dedicated 8 GB GPU · 32 GB/i)).toBeVisible()
+})
+
 test('desktop layout avoids horizontal overflow', async ({ page }) => {
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)
   expect(overflow).toBeLessThanOrEqual(1)
