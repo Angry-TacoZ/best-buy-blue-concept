@@ -33,7 +33,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
 button { color: inherit; }
 a { color: inherit; text-decoration: none; }
 
-button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
+button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, .shortlist-heading h2:focus-visible {
   outline: 3px solid var(--yellow);
   outline-offset: 3px;
 }

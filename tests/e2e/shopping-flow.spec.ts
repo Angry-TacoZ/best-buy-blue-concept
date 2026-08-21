@@ -25,12 +25,16 @@ test('completes the personalized college-laptop decision flow', async ({ page })
 test('header Finalists link reveals and scrolls to the same shortlist', async ({ page }) => {
   test.skip((page.viewportSize()?.width ?? 0) < 1100, 'Header navigation links are hidden at compact desktop widths.')
   await page.getByRole('button', { name: /Continue shopping/i }).click()
-  await page.getByRole('link', { name: 'Finalists' }).click()
+  const finalistsLink = page.getByRole('link', { name: 'Finalists' })
+  await finalistsLink.focus()
+  await page.keyboard.press('Enter')
 
   const shortlist = page.locator('#finalists')
+  const shortlistHeading = page.getByRole('heading', { name: /CAD changes the finalists/i })
   await expect(shortlist).toBeVisible()
   await expect(shortlist.locator('.finalist')).toHaveCount(3)
   await expect(shortlist).toBeInViewport()
+  await expect(shortlistHeading).toBeFocused()
 })
 
 test('same CAD scenario becomes generic and selects integrated graphics with memory off', async ({ page }) => {
