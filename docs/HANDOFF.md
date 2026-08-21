@@ -4,7 +4,7 @@ Create and publish an independent Best Buy concept demo showing a quiet, cursor-
 
 # Current status
 
-The CAD-aware memory comparison is merged and published at `https://angry-tacoz.github.io/best-buy-blue-concept/`. PR #2 passed CI and was squash-merged to `main`. The local development server remains available at `http://127.0.0.1:4173/` for this session. The public README now uses shorter sentences and standard punctuation.
+The published baseline remains at `https://angry-tacoz.github.io/best-buy-blue-concept/`. A protected extension of the existing experience is implemented locally on `codex/curated-checkout-slice`: memory-snapshot curation now carries one laptop from the landing page through an illustrative checkout and completion state. The existing landing, catalogue, shortlist, memory comparison, and Blue behavior remain intact.
 
 # Decisions
 
@@ -15,7 +15,9 @@ The CAD-aware memory comparison is merged and published at `https://angry-tacoz.
 - Recommendation logic is deterministic and returns one ultralight, one durable, and one value finalist.
 - The seeded profile includes a CAD class. Supported CAD terms activate explicit GPU, installed-memory, and performance weighting.
 - Turning memory off preserves the saved scenario but intentionally ignores it, returning generic tips and changing the first finalist from dedicated to integrated graphics.
-- No API, backend, authentication, analytics, live Best Buy data, model calls, or checkout.
+- No API, backend, authentication, analytics, live Best Buy data, model calls, or transactional checkout.
+- Curation is created only when the shopper clicks the new landing-page action. It stores a typed snapshot of memory rather than reading mutable preferences throughout the journey.
+- Checkout is a local simulation with no personal-data fields, payment details, reservation, or purchase side effect.
 
 # Changed files
 
@@ -24,14 +26,17 @@ The CAD-aware memory comparison is merged and published at `https://angry-tacoz.
 - Verification, CI, Pages deployment, and documentation configuration
 - CAD-aware scoring, editable coursework, product GPU/RAM specifications, and the memory-impact comparison
 - `README.md` copy refinement
+- `src/lib/curation.ts` and typed journey state for generation-time memory snapshots
+- New curated-laptops, journey-header, checkout, and completion presentation components
+- A new landing-page curation handoff; existing sections and interactions remain in place
 
 # Verification
 
 - Lint, strict TypeScript, and production build passed.
-- Sixteen unit/component tests passed.
-- Fourteen Playwright tests passed across 1440×900 and 1024×768, covering editable CAD coursework, the memory-on/off shortlist change, the primary flow, memory disable/restore, overflow, reduced motion, no-audio behavior, and automated accessibility.
+- Nineteen unit/component tests passed, including generation-time snapshot immutability and memory-off curation.
+- Sixteen Playwright tests passed across 1440×900 and 1024×768, covering the existing experience plus the generated curation, checkout, and no-purchase completion path.
 - Axe reported no serious or critical violations after entrance motion settled.
-- Local HTTP returned 200 and browser interaction checks showed no console errors.
+- Local browser inspection confirmed the curated, checkout, and completion layouts, no horizontal overflow, and no page-origin console errors.
 - Canonical verifier returned `PASS` for declared scope `public-low-risk`.
 - Predeployment secret/API exposure scan passed.
 - GitHub Verify and Pages workflows passed on the merged source state.
@@ -42,9 +47,10 @@ The CAD-aware memory comparison is merged and published at `https://angry-tacoz.
 
 # Next task
 
-Optional employer feedback and iteration. A real retailer integration remains intentionally out of scope.
+Move the verified extension through its focused PR and public Pages deployment, then smoke-test the released journey.
 
 # Risks or blockers
 
 - No release blocker remains for the declared public, low-risk static-demo scope.
 - Products, pricing, reviews, availability, saved memory, and recommendations are illustrative—not live retail data.
+- Checkout demonstrates continuity and human approval only; it must not be mistaken for transactional functionality.

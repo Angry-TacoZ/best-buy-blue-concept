@@ -72,4 +72,24 @@ describe('Blue concept experience', () => {
     fireEvent.click(screen.getAllByLabelText(/Close shopping memory/i).at(-1)!)
     expect(container.querySelector('.finalist')).toHaveTextContent(/HALO 14/i)
   })
+
+  it('preserves the existing landing experience while adding a curated path through checkout', () => {
+    render(<App />)
+    expect(screen.getByRole('heading', { name: /A shopping agent that knows when to speak/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /Explore six laptops/i })).toBeEnabled()
+
+    fireEvent.click(screen.getByRole('button', { name: /Build my curated laptop page/i }))
+    expect(screen.getByRole('heading', { name: /Your laptop page, shaped by what Blue remembers/i })).toBeInTheDocument()
+    expect(screen.getByText(/CAD coursework/i)).toBeInTheDocument()
+    expect(screen.getAllByRole('button', { name: /Choose this laptop/i })).toHaveLength(3)
+
+    fireEvent.click(screen.getAllByRole('button', { name: /Choose this laptop/i })[0])
+    fireEvent.click(screen.getByRole('button', { name: /Continue to checkout/i }))
+    expect(screen.getByRole('heading', { name: /Review the decision before acting/i })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: /Order summary/i })).toBeInTheDocument()
+    expect(screen.getByText(/No payment or personal information is collected/i)).toBeInTheDocument()
+
+    fireEvent.click(screen.getByRole('button', { name: /Complete demo checkout/i }))
+    expect(screen.getByRole('heading', { name: /Nothing was purchased/i })).toBeInTheDocument()
+  })
 })

@@ -60,8 +60,26 @@ export interface ShortlistResult {
   changeFactor: string
 }
 
+export type JourneyView = 'home' | 'curated' | 'checkout' | 'complete'
+
+export interface CuratedCollection {
+  generatedAt: number
+  memorySnapshot: ShoppingMemory
+  results: ShortlistResult[]
+  signals: string[]
+}
+
+export interface CheckoutSelection {
+  product: Product
+  protectionPlan: boolean
+  fulfillment: 'pickup'
+}
+
 export interface DemoState {
   selectedProductIds: string[]
   shortlistVisible: boolean
   memoryPanelOpen: boolean
+  journeyView: JourneyView
+  curatedCollection: CuratedCollection | null
+  checkoutSelection: CheckoutSelection | null
 }

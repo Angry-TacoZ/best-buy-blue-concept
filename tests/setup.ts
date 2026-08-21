@@ -15,6 +15,7 @@ Object.defineProperty(window, 'matchMedia', {
 })
 
 window.HTMLElement.prototype.scrollIntoView = () => undefined
+window.scrollTo = () => undefined
 
 class IntersectionObserverMock implements IntersectionObserver {
   readonly root = null

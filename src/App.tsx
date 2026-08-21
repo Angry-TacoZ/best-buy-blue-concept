@@ -1,11 +1,15 @@
 import { motion } from 'framer-motion'
-import { ArrowDown, ArrowRight, Check, Info, MemoryStick, Search, ShieldCheck, Sparkles } from 'lucide-react'
+import { ArrowDown, ArrowRight, Check, Info, Laptop, MemoryStick, Search, ShieldCheck, Sparkles } from 'lucide-react'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { AmbientBlue } from './components/AmbientBlue'
+import { CheckoutCompletePage } from './components/CheckoutCompletePage'
+import { CheckoutPage } from './components/CheckoutPage'
+import { CuratedLaptopsPage } from './components/CuratedLaptopsPage'
 import { MemoryDisclosure } from './components/MemoryDisclosure'
 import { MemoryPanel } from './components/MemoryPanel'
 import { ProductVisual } from './components/ProductVisual'
 import { products } from './data/products'
+import { createCuratedCollection } from './lib/curation'
 import { getProductGuidance, getShortlist, hasCadNeed } from './lib/recommendations'
 import { clearMemory, loadMemory, restoreMemory, saveMemory } from './lib/storage'
 import type { AgentCue, DemoState, Product, ShoppingMemory } from './types'
@@ -20,6 +24,9 @@ function App() {
     selectedProductIds: [],
     shortlistVisible: false,
     memoryPanelOpen: false,
+    journeyView: 'home',
+    curatedCollection: null,
+    checkoutSelection: null,
   })
   const cueTimer = useRef<number | undefined>(undefined)
   const productSection = useRef<HTMLElement>(null)
@@ -99,6 +106,66 @@ function App() {
     showCue('The fictional college-shopping profile is restored for the demo.')
   }
 
+  const startCuratedJourney = () => {
+    const collection = createCuratedCollection(products, memory)
+    setState((current) => ({ ...current, journeyView: 'curated', curatedCollection: collection, checkoutSelection: null }))
+    setAnnouncement(`Curated laptop page generated from ${collection.signals.length} memory signals.`)
+    window.scrollTo({ top: 0 })
+  }
+
+  const selectCuratedProduct = (product: Product) => {
+    setState((current) => ({
+      ...current,
+      checkoutSelection: { product, protectionPlan: false, fulfillment: 'pickup' },
+    }))
+    showCue(`${product.name} is selected. I’ll carry the reason it fits into checkout.`)
+  }
+
+  const returnHome = () => {
+    setState((current) => ({ ...current, journeyView: 'home' }))
+    window.scrollTo({ top: 0 })
+  }
+
+  if (state.journeyView === 'curated' && state.curatedCollection) {
+    return (
+      <>
+        <CuratedLaptopsPage
+          collection={state.curatedCollection}
+          selectedProductId={state.checkoutSelection?.product.id}
+          onSelect={selectCuratedProduct}
+          onCheckout={() => {
+            if (!state.checkoutSelection) return
+            setState((current) => ({ ...current, journeyView: 'checkout' }))
+            window.scrollTo({ top: 0 })
+          }}
+          onBack={returnHome}
+          onRebuild={startCuratedJourney}
+        />
+        <AmbientBlue cue={cue} />
+        <div className="sr-only" aria-live="polite" aria-atomic="true">{announcement}</div>
+      </>
+    )
+  }
+
+  if (state.journeyView === 'checkout' && state.checkoutSelection) {
+    return (
+      <CheckoutPage
+        selection={state.checkoutSelection}
+        memory={state.curatedCollection?.memorySnapshot ?? memory}
+        onProtectionChange={(protectionPlan) => setState((current) => current.checkoutSelection ? ({ ...current, checkoutSelection: { ...current.checkoutSelection, protectionPlan } }) : current)}
+        onBack={() => setState((current) => ({ ...current, journeyView: 'curated' }))}
+        onComplete={() => {
+          setState((current) => ({ ...current, journeyView: 'complete' }))
+          window.scrollTo({ top: 0 })
+        }}
+      />
+    )
+  }
+
+  if (state.journeyView === 'complete' && state.checkoutSelection) {
+    return <CheckoutCompletePage selection={state.checkoutSelection} memory={state.curatedCollection?.memorySnapshot ?? memory} onRestart={returnHome} />
+  }
+
   return (
     <div className="app-shell">
       <div className="desktop-notice">
@@ -158,6 +225,16 @@ function App() {
             showCue('I’ll keep the college context visible and editable. Nothing is sent from this browser.')
           }}
         />
+
+        <section className="curation-entry" aria-labelledby="curation-entry-title">
+          <div className="curation-entry-icon"><Laptop size={24} /></div>
+          <div>
+            <span className="eyebrow">Generated when you ask</span>
+            <h2 id="curation-entry-title">Turn memory into a curated laptop page.</h2>
+            <p>Blue will take a snapshot of the visible shopping memory, generate three distinct options, and carry the chosen laptop through a simulated checkout.</p>
+          </div>
+          <button className="primary-button primary-button--large" onClick={startCuratedJourney}>Build my curated laptop page <ArrowRight size={18} /></button>
+        </section>
 
         <section className="catalogue" id="laptops" ref={productSection} aria-labelledby="catalogue-title">
           <div className="section-heading">
