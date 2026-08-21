@@ -4,7 +4,7 @@ Create and publish an independent Best Buy concept demo showing a quiet, cursor-
 
 # Current status
 
-The CAD-aware memory comparison is merged and published at `https://angry-tacoz.github.io/best-buy-blue-concept/`. PR #2 passed CI and was squash-merged to `main`. The local development server remains available at `http://127.0.0.1:4173/` for this session.
+The CAD-aware memory comparison is merged and published at `https://angry-tacoz.github.io/best-buy-blue-concept/`. PR #2 passed CI and was squash-merged to `main`. The local development server remains available at `http://127.0.0.1:4173/` for this session. The public README now uses shorter sentences and standard punctuation.
 
 # Decisions
 
@@ -23,6 +23,7 @@ The CAD-aware memory comparison is merged and published at `https://angry-tacoz.
 - Unit/component and Playwright coverage under `tests/`
 - Verification, CI, Pages deployment, and documentation configuration
 - CAD-aware scoring, editable coursework, product GPU/RAM specifications, and the memory-impact comparison
+- `README.md` copy refinement
 
 # Verification
 
