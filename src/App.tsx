@@ -63,7 +63,7 @@ function App() {
     showCue(getProductGuidance(product, memory), event.currentTarget, event.detail === 0)
   }
 
-  const revealShortlist = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const revealShortlist = (event: React.MouseEvent<HTMLElement>) => {
     setState((current) => ({ ...current, shortlistVisible: true }))
     showCue(
       memory.enabled
@@ -185,7 +185,15 @@ function App() {
         </label>
         <nav aria-label="Concept navigation">
           <a href="#laptops">Laptops</a>
-          <a href="#finalists">Finalists</a>
+          <a
+            href="#finalists"
+            onClick={(event) => {
+              event.preventDefault()
+              revealShortlist(event)
+            }}
+          >
+            Finalists
+          </a>
           <button className={`memory-status ${memory.enabled ? 'memory-status--on' : ''}`} onClick={() => setState((current) => ({ ...current, memoryPanelOpen: true }))}>
             <MemoryStick size={16} /> Memory {memory.enabled ? 'on' : 'off'}
           </button>

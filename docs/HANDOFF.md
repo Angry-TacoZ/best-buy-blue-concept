@@ -6,6 +6,8 @@ Create and publish an independent Best Buy concept demo showing a quiet, cursor-
 
 The memory-curated vertical slice is merged and published at `https://angry-tacoz.github.io/best-buy-blue-concept/`. PR #4 passed CI and was squash-merged to `main` as `2a2771d7ad122a9f23d5a7c1dc29e68c1b93f8d3`. Memory-snapshot curation now carries one laptop from the landing page through an illustrative checkout and completion state. The existing landing, catalogue, shortlist, memory comparison, and Blue behavior remain intact.
 
+The `codex/fix-finalists-navigation` branch fixes the header `Finalists` link so it reveals and scrolls to the same shortlist as the yellow `Show three finalists` button. The published site does not include this fix until the branch is reviewed, merged, and deployed.
+
 # Decisions
 
 - Public, low-risk static concept; fictional products and illustrative prices only.
@@ -29,6 +31,7 @@ The memory-curated vertical slice is merged and published at `https://angry-taco
 - `src/lib/curation.ts` and typed journey state for generation-time memory snapshots
 - New curated-laptops, journey-header, checkout, and completion presentation components
 - A new landing-page curation handoff; existing sections and interactions remain in place
+- Shared shortlist-reveal behavior for the header `Finalists` link and yellow finalist button, with unit and Playwright regression coverage
 
 # Verification
 
@@ -46,10 +49,12 @@ The memory-curated vertical slice is merged and published at `https://angry-taco
 - Live smoke testing confirmed memory-on finalists `HALO 14 / FORGE 14 / ATLAS 14`, memory-off finalists `AER 13 / FORGE 14 / ATLAS 14`, no horizontal overflow, and no page-origin console warnings or errors.
 - PR #4, post-merge Verify, and GitHub Pages deployment passed for merge commit `2a2771d7ad122a9f23d5a7c1dc29e68c1b93f8d3`.
 - Public smoke testing confirmed three CAD-aware curated products, HALO 14 checkout continuity, the no-purchase completion state, zero checkout overflow, and no page-origin warnings or errors.
+- The finalist-navigation fix passed the canonical verifier: ESLint, strict TypeScript, 20 unit/component tests, and production build.
+- The complete Playwright suite passed with 17 tests and one intentional compact-width skip; the header link revealed three finalists and scrolled the shortlist into view at 1440px, while header navigation remains intentionally hidden below 1100px.
 
 # Next task
 
-Optional employer feedback and iteration. Real transactional integration remains intentionally out of scope.
+Review the finalist-navigation fix before merge. After approval, merge and deploy through the existing GitHub Pages workflow. Real transactional integration remains intentionally out of scope.
 
 # Risks or blockers
 
